@@ -110,8 +110,10 @@ router.delete("/clear", async (req, res) => {
       return res.json({ message: "Cart already empty" });
     }
 
-    cart.items = [];
-    await cart.save();
+    await Cart.updateOne(
+      { userId },
+      { $set: { items: [] } }
+    );
 
     res.json({ message: "Cart cleared successfully" });
   } catch (err) {

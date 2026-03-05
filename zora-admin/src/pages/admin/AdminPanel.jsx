@@ -50,7 +50,9 @@ function AdminPanel() {
 const loadProducts = async () => {
   try {
     const data = await fetchProducts();
-    setProducts(data);
+    // API returns `{ products, page, totalPages, totalProducts }`.
+    // Accept either the full response or a direct array for flexibility.
+    setProducts(Array.isArray(data) ? data : data.products || []);
   } catch (err) {
     console.error("Failed to load products", err);
   }
@@ -146,7 +148,8 @@ const loadProducts = async () => {
       stock: 10,
     });
 
-    fetchProducts(); // re-fetch products from MongoDB
+    // re-fetch products from backend and update state
+    await loadProducts();
   } catch (err) {
     console.error("Save failed", err);
     alert("Failed to add product");
@@ -166,7 +169,7 @@ const loadProducts = async () => {
 
   try {
     await deleteProduct(id);
-    fetchProducts();
+    await loadProducts();
   } catch (err) {
     console.error("Delete failed", err);
     alert("Failed to delete product");

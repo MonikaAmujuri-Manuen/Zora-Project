@@ -2,14 +2,15 @@ import express from "express";
 import Product from "../models/Product.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import adminMiddleware from "../middleware/adminMiddleware.js";
-import { deleteProduct } from "../../zora-admin/src/services/productApi.js";
+
 
 const router = express.Router();
 
 /* GET ALL PRODUCTS */
 // GET ALL PRODUCTS
 router.get("/", async (req, res) => {
-  const { category, subcategory } = req.query;
+  try {
+    const { category, subCategory, page = 1, limit = 10 } = req.query;
 
     let filter = {};
 
@@ -17,13 +18,28 @@ router.get("/", async (req, res) => {
       filter.category = category;
     }
 
-    if (subcategory) {
-      filter.subcategory = subcategory;
+    if (subCategory) {
+      filter.subCategory = subCategory;
     }
 
-  const products = await Product.find(filter);
-  console.log(products);
-  res.json(products);
+    const skip = (page - 1) * limit;
+
+    const products = await Product.find(filter)
+      .skip(Number(skip))
+      .limit(Number(limit));
+
+    const total = await Product.countDocuments(filter);
+
+    res.json({
+      products,
+      page: Number(page),
+      totalPages: Math.ceil(total / limit),
+      totalProducts: total,
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 // GET RECENT PRODUCTS

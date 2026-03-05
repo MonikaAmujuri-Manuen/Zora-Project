@@ -49,6 +49,7 @@ function Login() {
 
             // 🔥 Get Firebase ID token
             const idToken = await firebaseUser.getIdToken();
+            console.log("FIREBASE TOKEN:", idToken);
 
             // 🔥 Send token to backend
             const res = await fetch("http://localhost:5000/api/auth/firebase-login", {

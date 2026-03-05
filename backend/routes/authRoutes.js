@@ -5,11 +5,15 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import { getAuth } from "firebase/auth";
+
+
 
 const router = express.Router();
 
 /* FIREBASE LOGIN */
 router.post("/firebase-login", async (req, res) => {
+  
   try {
     const { idToken } = req.body;
 
@@ -21,7 +25,7 @@ router.post("/firebase-login", async (req, res) => {
 
     // Check if user exists in MongoDB
     let user = await User.findOne({ phone });
-
+   
     if (!user) {
       // Create new user
       user = await User.create({
@@ -39,8 +43,10 @@ router.post("/firebase-login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    user.isOnline = true;   // ✅ ADD THIS
-    await user.save(); 
+    if (!user.isOnline) {
+  user.isOnline = true;
+  await user.save();
+}
 
     res.json({
       _id: user._id,

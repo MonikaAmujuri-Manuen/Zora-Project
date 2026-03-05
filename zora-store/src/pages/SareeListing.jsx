@@ -114,7 +114,9 @@ function SareeListing() {
   useEffect(() => {
     const loadProducts = async () => {
       const data = await fetchProducts();
-      setProducts(data);
+      // API returns `{ products, page, totalPages, totalProducts }`.
+      // Accept either the full response or a direct array for flexibility.
+      setProducts(Array.isArray(data) ? data : data.products || []);
     };
 
     loadProducts();

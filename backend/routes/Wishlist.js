@@ -16,31 +16,40 @@ router.get("/count", protect, async (req, res) => {
    TOGGLE WISHLIST
 ====================== */
 router.post("/toggle", protect, async (req, res) => {
-  const { productId } = req.body;
+  try {
+    const { productId } = req.body;
+    const userId = req.user._id;
 
-  let wishlist = await Wishlist.findOne({ user: req.user._id });
+    if (!productId) {
+      return res.status(400).json({ message: "productId is required" });
+    }
 
-  if (!wishlist) {
-    wishlist = new Wishlist({ user: req.user._id, items: [] });
-  }
-
-  const exists = wishlist.items.find(
-    (item) => item.product.toString() === productId
-  );
-
-  if (exists) {
-    wishlist.items = wishlist.items.filter(
-      (item) => item.product.toString() !== productId
+    // Ensure wishlist exists (upsert)
+    const wishlist = await Wishlist.findOneAndUpdate(
+      { user: userId },
+      { $setOnInsert: { user: userId, items: [] } },
+      { new: true, upsert: true }
     );
-  } else {
-    wishlist.items.push({ product: productId });
+
+    // Check if product already exists
+    const exists = wishlist.items.some(
+      (item) => item.product.toString() === productId
+    );
+
+    // Atomic toggle
+    const updated = await Wishlist.findOneAndUpdate(
+      { user: userId },
+      exists
+        ? { $pull: { items: { product: productId } } }
+        : { $addToSet: { items: { product: productId } } },
+      { new: true }
+    );
+
+    return res.json({ count: updated.items.length });
+  } catch (err) {
+    console.error("WISHLIST TOGGLE ERROR:", err);
+    return res.status(500).json({ message: "Wishlist toggle failed" });
   }
-
-  console.log("User ID:", req.user?._id);
-  console.log("Product ID:", productId);
-
-  await wishlist.save();
-  res.json({ count: wishlist.items.length });
 });
 
 /* ======================
