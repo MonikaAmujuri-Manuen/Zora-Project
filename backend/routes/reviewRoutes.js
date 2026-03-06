@@ -70,7 +70,10 @@ router.post("/", async (req, res) => {
       numReviews: reviews.length,
     });
 
-    res.status(201).json({ message: "Review added successfully" });
+    res.status(201).json({
+      message: "Review added successfully",
+      review,
+    });
 
   } catch (error) {
     console.error("Review save error:", error);

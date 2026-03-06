@@ -115,7 +115,12 @@ Protected Routes Security Test (10 VUs)
 | CPU Usage         | 17%                           |
 | Disk Usage        | 2%                            |
 
+Protected Route Validation Summary
 
+Scenario	               | Expected | Actual	| Status
+No token	               |   401	  |   401	|  Pass
+User token on admin route  |   403	  |   403	|  Pass
+Admin token on admin route |   200	  |   200	|  Pass
 
 Cart Add API - http://localhost:5000/api/cart/add
 
@@ -131,7 +136,7 @@ Cart Add API - http://localhost:5000/api/cart/add
 | Max Response Time         | 2.88 s                  |
 | Requests per Second (RPS) | 29.75/s                 |
 | Failure Rate              | 0%                      |
-| Notes                      | Stable under load       |
+| Notes                     | Stable under load       |
 
 
 Cart Update API - http://localhost:5000/api/cart/update
@@ -466,7 +471,7 @@ Review Get API - http://localhost:5000/api/reviews/:productId
 | Notes                     | Efficient               |
 
 
-Review Get API - http://localhost:5000/api/reviews/:id
+Review Update API - http://localhost:5000/api/reviews/:id
 
 | Metric                    | Result                  |
 | -----------------         | ----------------------- |
@@ -484,22 +489,22 @@ Review Get API - http://localhost:5000/api/reviews/:id
 | Notes                     | Slow due to full review |
 
 
-Review Get API - http://localhost:5000/api/reviews/:id
+Review Delete API - http://localhost:5000/api/reviews/:id
 
 | Metric                    | Result                  |
 | -----------------         | ----------------------- |
 | Virtual Users             | 100                     |
 | Duration                  | 10                      |
 | Total Requests            | 594                     |
-| Avg Response Time         | 731 ms                  |
-| p90 Response Time         | 3.99 s                  |
-| p95 Response Time         | 4.04 s                  |
-| Max Response Time         | 4.99 s                  |
-| Requests per Second (RPS) | 54/s                    |
-| Failure Rate              | 83%                     |
-| CPU Usage                 | 3.64%                   |
-| Memory Usage              | 209.59 MB               |
-| Notes                     | due to repeated deletion|
+| Avg Response Time         | 203.1 ms                |
+| p90 Response Time         | 324.28 ms               |
+| p95 Response Time         | 386.13 ms               |
+| Max Response Time         | 400.87 ms               |
+| Requests per Second (RPS) | 7.7/s                   |
+| Failure Rate              | 0%                      |
+| CPU Usage                 | 5.67%                   |
+| Memory Usage              | 81.47 MB                |
+| Notes                     | Stable deletion         |
 
 
 Update Profile API - http://localhost:5000/api/users/update-profile
