@@ -95,10 +95,11 @@ Protected Routes Security Test (10 VUs)
 
 Protected Route Validation Summary
 
-Scenario	                 | Expected | Actual	| Status
-No token	                 |   401	  |   401	  |  Pass
-User token on admin route  |   403	  |   403	  |  Pass
-Admin token on admin route |   200	  |   200	  |  Pass
+| Scenario	                 | Expected | Actual	| Status|
+|----------------------------|----------|---------|-------|
+|No token	                   |   401	  |   401	  |  Pass |
+|User token on admin route   |   403	  |   403	  |  Pass |
+|Admin token on admin route  |   200	  |   200	  |  Pass |
 
 
 Cart Add API - http://localhost:5000/api/cart/add
