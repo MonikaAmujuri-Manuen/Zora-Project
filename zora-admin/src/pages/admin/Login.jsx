@@ -61,7 +61,7 @@ function Login() {
             const data = await res.json();
 
             if (!res.ok) {
-                alert("Backend login failed");
+                alert(data.message || "Backend login failed");
                 return;
             }
 
@@ -77,7 +77,7 @@ function Login() {
             navigate("/admin/dashboard", { replace: true });
         } catch (err) {
             console.error(err);
-            alert("Invalid OTP");
+            alert(err.message || "Invalid OTP");
         }
     };
     return (

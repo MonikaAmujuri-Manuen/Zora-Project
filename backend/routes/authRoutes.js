@@ -1,27 +1,36 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import admin from "firebase-admin";
+import admin from "../config/firebaseAdmin.js";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import authMiddleware from "../middleware/authMiddleware.js";
-import { getAuth } from "firebase/auth";
-
-
 
 const router = express.Router();
 
 /* FIREBASE LOGIN */
 router.post("/firebase-login", async (req, res) => {
-  
   try {
-    const { idToken } = req.body;
+    const { idToken, phoneNumber } = req.body;
 
-    // Verify Firebase token
-    const decoded = await admin.auth().verifyIdToken(idToken);
+    if (!idToken) {
+      return res.status(400).json({ message: "Firebase ID token is required" });
+    }
 
-    const phone = decoded.phone_number;
+    let decoded;
+    try {
+      decoded = await admin.auth().verifyIdToken(idToken);
+    } catch (error) {
+      console.error("FIREBASE TOKEN VERIFY ERROR:", error);
+      return res.status(401).json({ message: "Invalid Firebase token" });
+    }
+
+    const phone = decoded.phone_number || phoneNumber;
     const uid = decoded.uid;
+
+    if (!phone) {
+      return res.status(400).json({ message: "Phone number not found in Firebase token" });
+    }
 
     // Check if user exists in MongoDB
     let user = await User.findOne({ phone });
@@ -36,6 +45,10 @@ router.post("/firebase-login", async (req, res) => {
       });
     }
 
+    if (!user.name) {
+      user.name = "User";
+    }
+
     // Create JWT for your app
     const token = jwt.sign(
       { id: user._id, role: user.role },
@@ -43,10 +56,10 @@ router.post("/firebase-login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    if (!user.isOnline) {
-  user.isOnline = true;
-  await user.save();
-}
+    if (!user.isOnline || user.isModified()) {
+      user.isOnline = true;
+      await user.save();
+    }
 
     res.json({
       _id: user._id,
@@ -59,7 +72,7 @@ router.post("/firebase-login", async (req, res) => {
 
   } catch (err) {
     console.error("FIREBASE LOGIN ERROR:", err);
-    res.status(401).json({ message: "Invalid Firebase token" });
+    res.status(500).json({ message: "Firebase login failed" });
   }
 });
 

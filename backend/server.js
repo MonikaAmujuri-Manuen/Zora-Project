@@ -15,7 +15,6 @@ import reviewRoutes from "./routes/reviewRoutes.js";
 import cookieParser from "cookie-parser";
 import adminRoutes from "./routes/adminRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
-import firebaseAuthRoutes from "./routes/firebaseAuth.js";
 
 dotenv.config();
 
@@ -52,7 +51,6 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/contact", contactRoutes);
-app.use("/api/auth", firebaseAuthRoutes);
 
 
 /* DB CONNECT */
