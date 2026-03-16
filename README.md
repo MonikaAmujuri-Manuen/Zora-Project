@@ -55,25 +55,26 @@ Make sure you have installed:
 - npm
 - MongoDB local instance or MongoDB Atlas
 
-### Git
+### Installation
 
-Installation
-
-1. Clone the repository
+#### 1. Clone the repository
+```bash
 git clone https://github.com/MonikaAmujuri/Zora-Project.git
 cd Zora-Project
+```
 
-2. Setup the backend
+#### 2. Setup the backend
+```bash
 cd backend
 npm install
 
-Run the backend server:
-
+### Run the backend server:
+```bash
 npm run dev
-3. Setup the customer storefront
-
-Open a new terminal:
-
+```
+#### 3. Setup the customer storefront
+```bash
 cd Zora-Project/zora-store
 npm install
 npm run dev
+```
