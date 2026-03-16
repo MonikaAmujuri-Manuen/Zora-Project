@@ -67,7 +67,7 @@ cd Zora-Project
 ```bash
 cd backend
 npm install
-
+```
 ### Run the backend server:
 ```bash
 npm run dev
