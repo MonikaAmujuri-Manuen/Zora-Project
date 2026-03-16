@@ -19,7 +19,7 @@ The repository is organized into three main applications:
 ## Tech Stack
 
 
-# Backend
+### Backend
 
 - Runtime: Node.js
 - Framework: Express.js
@@ -28,7 +28,7 @@ The repository is organized into three main applications:
 - Other Packages: CORS, dotenv, cookie-parser, Firebase Admin
 - Development Tooling: Nodemon
 
-# Frontend
+### Frontend
 
 - Framework: React
 - Build Tool: Vite
@@ -41,6 +41,39 @@ The repository is organized into three main applications:
 
 ## API Documentation
 
-C:\Users\MONIKA\ZORA-PROJECT\ADMIN_API.md
-C:\Users\MONIKA\ZORA-PROJECT\CUSTOMER_API.md
+Detailed API documentation for each module can be found here:
 
+- [Admin API](./ADMIN_API.md)
+- [Customer API](./CUSTOMER_API.md)
+
+## Getting Started
+### Prerequisites
+
+Make sure you have installed:
+
+- Node.js
+- npm
+- MongoDB local instance or MongoDB Atlas
+
+### Git
+
+Installation
+
+1. Clone the repository
+git clone https://github.com/MonikaAmujuri/Zora-Project.git
+cd Zora-Project
+
+2. Setup the backend
+cd backend
+npm install
+
+Run the backend server:
+
+npm run dev
+3. Setup the customer storefront
+
+Open a new terminal:
+
+cd Zora-Project/zora-store
+npm install
+npm run dev
