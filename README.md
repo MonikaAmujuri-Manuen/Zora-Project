@@ -68,11 +68,11 @@ cd Zora-Project
 cd backend
 npm install
 ```
-### Run the backend server:
+### 3. Run the backend server:
 ```bash
 npm run dev
 ```
-#### 3. Setup the customer storefront
+#### 4. Setup the customer storefront
 ```bash
 cd Zora-Project/zora-store
 npm install
