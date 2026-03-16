@@ -40,3 +40,7 @@ The repository is organized into three main applications:
 ---
 
 ## API Documentation
+
+ADMIN_API.md
+CUSTOMER_API.md
+
