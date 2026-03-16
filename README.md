@@ -41,6 +41,6 @@ The repository is organized into three main applications:
 
 ## API Documentation
 
-ADMIN_API.md
-CUSTOMER_API.md
+C:\Users\MONIKA\ZORA-PROJECT\ADMIN_API.md
+C:\Users\MONIKA\ZORA-PROJECT\CUSTOMER_API.md
 
