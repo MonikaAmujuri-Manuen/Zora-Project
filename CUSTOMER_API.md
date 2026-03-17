@@ -748,3 +748,445 @@ Content-Type: application/json
 ]
 ```
 
+## Create Contact Message
+
+**POST** `/api/contact`
+
+### Headers
+
+```http
+Content-Type: application/json
+```
+
+### Request Body
+
+```http
+{
+  "name": "Monika",
+  "email": "monika@example.com",
+  "message": "I need help with my order."
+}
+```
+### Response (200 OK)
+
+```http
+{
+  "message": "Message sent successfully",
+  "contact": {
+    "_id": "65f1a2b3c4d5e6f7890cont1",
+    "name": "Monika",
+    "email": "monika@example.com",
+    "message": "I need help with my order.",
+    "createdAt": "2026-03-16T10:00:00.000Z",
+    "updatedAt": "2026-03-16T10:00:00.000Z"
+  }
+}
+```
+
+### Error Response (400 Bad Request)
+
+```http
+{
+  "message": "All fields are required"
+}
+```
+### Error Response (500 Internal Server Error)
+
+```http
+{
+  "message": "Server error"
+}
+```
+
+## Toggle Wishlist Item
+
+**POST** `/api/wishlist/toggle`
+
+### Headers
+
+```http
+Content-Type: application/json
+Authorization: Bearer <eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...>
+```
+
+### Request Body
+
+```http
+{
+  "productId": "65f1a2b3c4d5e6f7890prod1"
+}
+```
+### Response (200 OK)
+
+```http
+{
+  "count": 3
+}
+```
+
+### Error Response (400 Bad Request)
+
+```http
+{
+  "message": "productId is required"
+}
+```
+### Error Response (500 Internal Server Error)
+
+```http
+{
+  "message": "Wishlist toggle failed"
+}
+```
+
+## Get Wishlist Count
+
+**GET** `/api/wishlist/count`
+
+### Headers
+
+```http
+Content-Type: application/json
+Authorization: Bearer <eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...>
+```
+
+### Request Body
+
+```http
+{}
+```
+### Response (200 OK)
+
+```http
+{
+  "count": 3
+}
+```
+
+### Alternative Response (200 Ok)
+
+```http
+{
+  "count": 0
+}
+```
+
+## Get Wishlist
+
+**GET** `/api/wishlist`
+
+### Headers
+
+```http
+Content-Type: application/json
+Authorization: Bearer <eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...>
+```
+### Request Body
+
+```http
+{}
+```
+### Response (200 OK)
+
+```http
+{
+  "_id": "65f1a2b3c4d5e6f7890wish1",
+  "user": "65f1a2b3c4d5e6f7890user1",
+  "items": [
+    {
+      "_id": "65f1a2b3c4d5e6f7890item1",
+      "product": {
+        "_id": "65f1a2b3c4d5e6f7890prod1",
+        "name": "Banarasi Silk Saree",
+        "price": 2499,
+        "image": "https://example.com/images/saree1.jpg",
+        "category": "Silk",
+        "description": "Elegant Banarasi silk saree with rich zari work."
+      }
+    },
+    {
+      "_id": "65f1a2b3c4d5e6f7890item2",
+      "product": {
+        "_id": "65f1a2b3c4d5e6f7890prod2",
+        "name": "Soft Cotton Saree",
+        "price": 1299,
+        "image": "https://example.com/images/saree2.jpg",
+        "category": "Cotton",
+        "description": "Lightweight cotton saree for daily wear."
+      }
+    }
+  ]
+}
+```
+
+### Alternative Response (200 Ok)
+
+- If the user is not Logged in
+
+```http
+{
+  "items": []
+}
+```
+
+## Create Review
+
+**POST** `/api/reviews`
+
+### Headers
+
+```http
+Content-Type: application/json
+Authorization: Bearer <eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...>
+```
+
+### Request Body
+
+```http
+{
+  "product": "65f1a2b3c4d5e6f7890prod1",
+  "rating": 5,
+  "comment": "Beautiful saree and very good quality."
+}
+```
+### Response (200 OK)
+
+```http
+{
+  "message": "Review added successfully",
+  "review": {
+    "_id": "65f1a2b3c4d5e6f7890revw1",
+    "user": "65f1a2b3c4d5e6f7890user1",
+    "product": "65f1a2b3c4d5e6f7890prod1",
+    "rating": 5,
+    "comment": "Beautiful saree and very good quality.",
+    "isVerifiedBuyer": true,
+    "createdAt": "2026-03-16T10:00:00.000Z",
+    "updatedAt": "2026-03-16T10:00:00.000Z"
+  }
+}
+```
+
+### Alternative Response (200 Ok)
+
+- Guest Review Response
+
+```http
+{
+  "message": "Review added successfully",
+  "review": {
+    "_id": "65f1a2b3c4d5e6f7890revw2",
+    "user": null,
+    "product": "65f1a2b3c4d5e6f7890prod1",
+    "rating": 4,
+    "comment": "Nice design and soft fabric.",
+    "isVerifiedBuyer": false,
+    "createdAt": "2026-03-16T10:10:00.000Z",
+    "updatedAt": "2026-03-16T10:10:00.000Z"
+  }
+}
+```
+
+### Error Response (400 Bad Request)
+
+```http
+{
+  "message": "You have already reviewed this product"
+}
+```
+### Error Response (500 Internal Server Error)
+
+```http
+{
+  "message": "Server error message"
+}
+```
+
+## Get Reviews By Product ID
+
+**GET** `/api/reviews/:productId`
+
+### Headers
+
+```http
+Content-Type: application/json
+```
+
+### Request Body
+
+```http
+{}
+```
+### Response (200 OK)
+
+```http
+[
+  {
+    "_id": "65f1a2b3c4d5e6f7890revw1",
+    "user": {
+      "_id": "65f1a2b3c4d5e6f7890user1",
+      "name": "Monika"
+    },
+    "product": "65f1a2b3c4d5e6f7890prod1",
+    "rating": 5,
+    "comment": "Beautiful saree and very good quality.",
+    "isVerifiedBuyer": true,
+    "createdAt": "2026-03-16T10:00:00.000Z",
+    "updatedAt": "2026-03-16T10:00:00.000Z"
+  },
+  {
+    "_id": "65f1a2b3c4d5e6f7890revw2",
+    "user": null,
+    "product": "65f1a2b3c4d5e6f7890prod1",
+    "rating": 4,
+    "comment": "Nice design and soft fabric.",
+    "isVerifiedBuyer": false,
+    "createdAt": "2026-03-16T09:30:00.000Z",
+    "updatedAt": "2026-03-16T09:30:00.000Z"
+  }
+]
+```
+
+### Error Response (500 Internal Server Error)
+
+```http
+{
+  "message": "Server error message"
+}
+```
+
+## Update Review
+
+**PUT** `/api/reviews/:id`
+
+### Headers
+
+```http
+Content-Type: application/json
+```
+
+### Request Body
+
+```http
+{
+  "rating": 4,
+  "comment": "Good quality saree and nice fabric."
+}
+```
+### Response (200 OK)
+
+```http
+{
+  "message": "Review updated successfully"
+}
+```
+
+### Error Response (404 Not fount)
+
+```http
+{
+  "message": "Review not found"
+}
+```
+
+### Error Response (500 Internal Server Error)
+
+```http
+{
+  "message": "Server error message"
+}
+```
+
+## Delete Review
+
+**DELETE** `/api/reviews/:id`
+
+### Headers
+
+```http
+Content-Type: application/json
+```
+
+### Request Body
+
+```http
+{}
+```
+### Response (200 OK)
+
+```http
+{
+  "message": "Review deleted successfully"
+}
+```
+
+### Error Response (404 Not fount)
+
+```http
+{
+  "message": "Review not found"
+}
+```
+
+### Error Response (500 Internal Server Error)
+
+```http
+{
+  "message": "Server error message"
+}
+```
+
+## Update Profile
+
+**PUT** `/api/users/update-profile`
+
+### Headers
+
+```http
+Content-Type: application/json
+Authorization: Bearer <eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...>
+```
+
+### Request Body
+
+```http
+{
+  "name": "Monika",
+  "address": {
+    "street": "Lakshmipuram",
+    "city": "Guntur",
+    "pincode": "522007"
+  }
+}
+```
+### Response (200 OK)
+
+```http
+{
+  "_id": "65f1a2b3c4d5e6f7890user1",
+  "name": "Monika",
+  "phone": "9876543210",
+  "role": "user",
+  "token": "eyJhbGciOiJSUzI1NiIsImtp...."
+}
+```
+
+### Error Response (404 Not fount)
+
+```http
+{
+  "message": "User not found"
+}
+```
+
+### Error Response (500 Internal Server Error)
+
+```http
+{
+  "message": "Server error message"
+}
+```
+
+
+
+

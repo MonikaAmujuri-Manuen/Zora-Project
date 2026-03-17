@@ -1,8 +1,7 @@
-import { useEffect, useState, useNavigate} from "react";
-import { fetchUserOrders } from "../../services/orderApi";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { authFetch } from "../../utils/api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserHeader from "../../components/user/UserHeader";
 import "../../components/user/UserHeader.css";
 import "./MyOrders.css";
@@ -10,7 +9,7 @@ import "./MyOrders.css";
 function MyOrders() {
     const [orders, setOrders] = useState([]);
     const { user, loading } = useAuth();
-    const navigate = useNavigate;
+    const navigate = useNavigate();
     const [cancelOrderId, setCancelOrderId] = useState(null);
     const [cancelReason, setCancelReason] = useState("");
     const [customReason, setCustomReason] = useState("");
@@ -18,23 +17,34 @@ function MyOrders() {
     useEffect(() => {
     if (loading) return;
 
-    if (!user) {
-      navigate("/");
+    if (!user?.token) {
+      setOrders([]);
+      navigate("/login");
       return;
     }
 
     fetchOrders();
-  }, [user, loading]);
+  }, [user, loading, navigate]);
 
   const fetchOrders = async () => {
   try {
     console.log("Fetching logged-in user orders");
+
+    if (!user?.token) {
+      setOrders([]);
+      return;
+    }
 
     const res = await authFetch(
       "http://localhost:5000/api/orders/my-orders"
     );
 
     if (!res.ok) {
+      if (res.status === 401) {
+        setOrders([]);
+        navigate("/login");
+        return;
+      }
       throw new Error("Failed to fetch orders");
     }
 

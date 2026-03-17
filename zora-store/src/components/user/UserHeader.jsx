@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { FiSearch, FiX, FiHeart, FiShoppingCart, FiUser, FiChevronDown } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { authFetch } from "../../utils/api";
 import logo from "../../assets/zora-logo.png";
 import { useLocation } from "react-router-dom";
 import "./UserHeader.css";
@@ -46,25 +45,30 @@ function UserHeader() {
 
   // 🔁 Read wishlist count
   const fetchWishlistCount = async () => {
-  if (!user || !user.token) {
-    setWishlistCount(0);
-    return;
-  }
-
-
-  const token = localStorage.getItem("token");
-  const res =await authFetch(
-    "http://localhost:5000/api/wishlist/count",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    if (!user?.token) {
+      setWishlistCount(0);
+      return;
     }
-  );
 
-  const data = await res.json();
-  setWishlistCount(data.count);
-};
+    try {
+      const res = await fetch("http://localhost:5000/api/wishlist/count", {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      if (!res.ok) {
+        setWishlistCount(0);
+        return;
+      }
+
+      const data = await res.json();
+      setWishlistCount(data.count || 0);
+    } catch (err) {
+      console.error("Wishlist count error", err);
+      setWishlistCount(0);
+    }
+  };
 
 useEffect(() => {
   fetchWishlistCount();

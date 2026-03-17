@@ -1,13 +1,18 @@
 import express from "express";
 import Wishlist from "../models/Wishlist.js";
 import protect from "../middleware/authMiddleware.js";
+import optionalAuth from "../middleware/optionalAuthMiddleware.js";
 
 const router = express.Router();
 
 /* ======================
    GET WISHLIST COUNT
 ====================== */
-router.get("/count", protect, async (req, res) => {
+router.get("/count", optionalAuth, async (req, res) => {
+  if (!req.user) {
+    return res.json({ count: 0 });
+  }
+
   const wishlist = await Wishlist.findOne({ user: req.user._id });
   res.json({ count: wishlist ? wishlist.items.length : 0 });
 });
@@ -55,7 +60,11 @@ router.post("/toggle", protect, async (req, res) => {
 /* ======================
    GET FULL WISHLIST
 ====================== */
-router.get("/", protect, async (req, res) => {
+router.get("/", optionalAuth, async (req, res) => {
+  if (!req.user) {
+    return res.json({ items: [] });
+  }
+
   const wishlist = await Wishlist.findOne({ user: req.user._id })
     .populate("items.product");
 
